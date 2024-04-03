@@ -1,37 +1,6 @@
-//1. grade generator
-function generateGrade(marks) {
-    if (marks > 79) {
-        return 'A';
-    } else if (marks >= 60 && marks <= 79) {
-        return 'B';
-    } else if (marks >= 50 && marks <= 59) {
-        return 'C';
-    } else if (marks >= 40 && marks <= 49) {
-        return 'D';
-    } else {
-        return 'E';
-    }
-}
-//2. speed detector 
-function speedDetector(speed) {
-    const speedLimit = 70;
-    const km = 5;
-    
-    if (speed <= speedLimit) {
-        return 'Ok';
-    } else {
-        const points = Math.floor((speed - speedLimit) / km);
-        if (points >= 12) {
-            return 'License suspended';
-        } else {
-            return 'Points: ' + points;
-        }
-    }
-}
-
-//3. sallary calculator
-// for calculating kra tax
+// Function for calculating KRA tax based on gross salary
 function calculateKraTax(grossSalary) {
+    // Check gross salary range and apply appropriate tax rate
     if (grossSalary <= 24999) {
         return grossSalary * 0.1;
     } else if (grossSalary <= 39999) {
@@ -45,12 +14,13 @@ function calculateKraTax(grossSalary) {
     } else if (grossSalary <= 119999) {
         return grossSalary * 0.35;
     } else {
-        return grossSalary * 0.4;
+        return grossSalary * 0.4; // Apply maximum tax rate if gross salary exceeds all previous ranges
     }
 }
 
-// for calculating nhif deductions
+// Function for calculating NHIF deductions based on gross salary
 function calculateNhifDeductions(grossSalary) {
+    // Check gross salary range and return fixed NHIF deduction amount
     if (grossSalary <= 5999) {
         return 150;
     } else if (grossSalary <= 7999) {
@@ -70,24 +40,32 @@ function calculateNhifDeductions(grossSalary) {
     } else if (grossSalary <= 39999) {
         return 950;
     } else {
-        return 1000;
+        return 1000; // Apply maximum NHIF deduction if gross salary exceeds all previous ranges
     }
 }
+
+// Function for calculating NSSF deductions based on gross salary
 function calculateNssfDeductions(grossSalary) {
+    // Define NSSF deduction percentage and maximum NSSF deduction
     const nssfPercentage = 0.06; 
     const maximumNssf = 1800; 
+    // Calculate NSSF deductions based on gross salary and apply maximum limit
     const nssfDeductions = Math.min(grossSalary * nssfPercentage, maximumNssf);
     return nssfDeductions;
 }
 
-// for calculating net salary
+// Function for calculating net salary after deductions
 function calculateNetSalary(basicSalary, benefits) {
+    // Calculate gross salary by adding basic salary and benefits
     const grossSalary = basicSalary + benefits;
+    // Calculate KRA tax, NHIF deductions, and NSSF deductions
     const kraTax = calculateKraTax(grossSalary);
     const nhifDeductions = calculateNhifDeductions(grossSalary);
     const nssfDeductions = calculateNssfDeductions(grossSalary);
+    // Calculate net salary after deducting taxes and deductions
     const netSalary = grossSalary - kraTax - nhifDeductions - nssfDeductions;
 
+    // Return an object containing detailed salary information
     return {
         payee: kraTax,
         nhifDeductions,
@@ -97,7 +75,11 @@ function calculateNetSalary(basicSalary, benefits) {
     };
 }
 
-// total 
-const totalDeductions = salaryDetails.payee + salaryDetails.nhifDeductions + salaryDetails.nssfDeductions;
-console.log("Total Deductions:", totalDeductions);
+// Calculate net salary details
+const salaryDetails = calculateNetSalary(basicSalary, benefits);
 
+// Calculate total deductions by summing up KRA tax, NHIF deductions, and NSSF deductions
+const totalDeductions = salaryDetails.payee + salaryDetails.nhifDeductions + salaryDetails.nssfDeductions;
+
+// Log total deductions to display on the console 
+console.log("Total Deductions:", totalDeductions);
